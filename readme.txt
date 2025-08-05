@@ -2,8 +2,8 @@
 Contributors: pmbaldha, woocommerce9, emailemailemail, freemius
 Tags: email, mail, email-woocommerce-email
 Requires at least: 4.0
-Tested up to: 6.7
-Stable tag: 5.3.12
+Tested up to: 6.8.2
+Stable tag: 5.3.13
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -123,6 +123,10 @@ The free version of the plugin can tracks email views. The Pro version of the pl
 4. Settings to manage all emails
 
 == Changelog ==
+
+= 5.3.13, August 06, 2025 =
+* TWEAK: Freemius library updated to the latest version.
+* TWEAK: Tested with WordPress 6.8.2 version.
 
 = 5.3.12, February 27, 2025 =
 * TWEAK: Freemius library updated to the latest version.
@@ -290,4 +294,4 @@ The free version of the plugin can tracks email views. The Pro version of the pl
 
 
 == Upgrade Notice ==
-* 1.24.12: Updated freemius library. A recommended update for all.
+* 1.24.13: Updated freemius library and tested with WordPress 6.8.2. A recommended update for all.

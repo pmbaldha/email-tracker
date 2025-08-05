@@ -1,0 +1,14 @@
+{
+    "name": "prashant/email-tracker",
+    "description": "For Email Tracker WordPress plugin.",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Prashant Baldha",
+            "email": "pmbaldha@gmail.com"
+        }
+    ],
+    "require": {
+        "soundasleep/html2text": "~1.1"
+    }
+}

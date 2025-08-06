@@ -46,10 +46,10 @@ class TrackEmail {
 	public function insert_email_open_log( $POST ) {
 		global $wpdb;
 
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is safely generated
 		$rs_email_cnt = $wpdb->get_var(
 			$wpdb->prepare(
-				'SELECT count(*) FROM ' . $this->email_table_name . ' WHERE 
-								email_id=%d',
+				"SELECT count(*) FROM {$this->email_table_name} WHERE email_id=%d",
 				intval( $POST['trkemail_email_id'] )
 			)
 		);
@@ -64,15 +64,16 @@ class TrackEmail {
 		$POST['trkemail_tacked_by'] = 'Image';
 
 		// Get date time for given interval
-		$interval_date_time = date( 'Y-m-d H:i:s', strtotime( sprintf( '-%d hours', $this->track_interval ) ) );
+		$interval_date_time = gmdate( 'Y-m-d H:i:s', strtotime( sprintf( '-%d hours', $this->track_interval ) ) );
 
 		// Set sql query parameters
 		$param = 'AND ' . $this->eo_fk . ' = %s AND trkemail_date_time > %s';
 
 		// Get record
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is safely generated
 		$rs_cnt = $wpdb->get_var(
 			$wpdb->prepare(
-				'SELECT count(*) FROM ' . $this->eo_table_name . ' WHERE 1 ' . $param,
+				"SELECT count(*) FROM {$this->eo_table_name} WHERE 1 {$param}",
 				$POST[ $this->eo_fk ],
 				$interval_date_time
 			)
@@ -161,7 +162,7 @@ class TrackEmail {
 
 	public function insert_link_open_log( $email_id ) {
 
-		$interval_date_time = date( 'Y-m-d H:i:s', strtotime( gmdate( 'Y-m-d H:i:s' ) ) - ( 3600 * 60 ) );
+		$interval_date_time = gmdate( 'Y-m-d H:i:s', strtotime( gmdate( 'Y-m-d H:i:s' ) ) - ( 3600 * 60 ) );
 		$client_ip          = self::get_client_ip();
 
 		$sql = $GLOBALS['wpdb']->prepare( 'SELECT count(*) as count FROM ' . Util::emtr_get_table_name( 'track_email_open_log' ) . ' WHERE trkemail_email_id=%d AND trkemail_ip_address = %s AND trkemail_date_time > %s', $email_id, $client_ip, $interval_date_time );

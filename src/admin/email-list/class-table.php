@@ -89,7 +89,8 @@ class Table extends \WP_List_Table {
             case 'subject':
 				return self::get_view_link( $item, $item['subject'] );
 			case 'view_count':
-				$str = '<b>'.sprintf( _n( '%s time', '%s times', $item[$column_name] ), $item[$column_name] ) . __( ' read', 'email-tracker' ) . '</b>';
+				/* translators: %s: Number of times email was read */
+				$str = '<b>'.sprintf( _n( '%s time', '%s times', $item[$column_name], 'email-tracker' ), $item[$column_name] ) . __( ' read', 'email-tracker' ) . '</b>';
 				if( $item[$column_name] == 0 ) {
 					$str .= '<div alt="f147" class="dashicons dashicons-no-alt"></div>';
 				}
@@ -109,7 +110,8 @@ class Table extends \WP_List_Table {
 			case 'click_count':
 				if ( emtr()->is__premium_only() ) {
         			if ( emtr()->is_plan( 'pro', true ) ||  emtr()->is_trial() ) {
-						$str = '<b>'.sprintf( _n( '%s time', '%s times', $item[$column_name] ), $item[$column_name] ).__(' clicked', 'email-tracker').'</b>';
+						/* translators: %s: Number of times link was clicked */
+						$str = '<b>'.sprintf( _n( '%s time', '%s times', $item[$column_name], 'email-tracker' ), $item[$column_name] ).__(' clicked', 'email-tracker').'</b>';
 						if( $item[$column_name] == 0 ) {
 							$str .= '<div alt="f147" class="dashicons dashicons-no-alt"></div>';
 						}
@@ -126,7 +128,8 @@ class Table extends \WP_List_Table {
 						return $str;
 					}
 				}
-				return '<strong>' . sprintf( __( 'To Track Email Links, Please %sUpgrade Now!%s', 'email-tracker'), '<a href="' . emtr()->get_upgrade_url() . '">', '</a>' ) . '<strong>';
+				/* translators: %1$s: Opening link tag, %2$s: Closing link tag */
+				return '<strong>' . sprintf( __( 'To Track Email Links, Please %1$sUpgrade Now!%2$s', 'email-tracker'), '<a href="' . emtr()->get_upgrade_url() . '">', '</a>' ) . '<strong>';
             case 'date_time':
 				return get_date_from_gmt( $item[$column_name] ,'F j, Y g:i A' ) . Util::emtr_relative_time( get_date_from_gmt( $item[$column_name] ) );
 				

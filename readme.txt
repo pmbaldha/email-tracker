@@ -2,7 +2,7 @@
 Contributors: pmbaldha, woocommerce9, emailemailemail, woocommerce, freemius
 Tags: email, mail, track, open, link
 Requires at least: 4.0
-Tested up to: 6.8.2
+Tested up to: 6.8
 Stable tag: 5.3.14
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -125,9 +125,11 @@ The free version of the plugin can tracks email views. The Pro version of the pl
 == Changelog ==
 
 = 5.3.14, August 07, 2025 =
-* COMPATIBILITY: Make the plugin code compatible with the Plugin Check Plugin (PCP).
 * FIX: PHP Notice: Function _load_textdomain_just_in_time was called <strong>incorrectly</strong>. Translation loading for the <code>email-tracker</code> domain was triggered too early. This is usually an indicator for some code in the plugin or theme running too early. Translations should be loaded at the <code>init</code> action or later. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 6.7.0.)
+* FIX: Add missing translation domain and translator comments for _n() function calls to comply with WordPress coding standards.
+* FIX: Use ordered placeholders in translatable strings for better translation support.
 * TWEAK: Simplify admin menu, submenu and help features and remove related unnecessary classes and interfaces.
+* COMPATIBILITY: Make the plugin code compatible with the Plugin Check Plugin (PCP).
 
 = 5.3.13, August 06, 2025 =
 * TWEAK: Freemius library updated to the latest version.

@@ -5,14 +5,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use PrashantWP\Email_Tracker\Core\Admin\Menu_Page;
-use PrashantWP\Email_Tracker\Core\Admin\Menu_Page_Hooker;
-
-use PrashantWP\Email_Tracker\Core\Admin\Screen_Help_Tab;
-use PrashantWP\Email_Tracker\Core\Admin\Screen_Help_Tab_Hooker;
-
-use PrashantWP\Email_Tracker\Core\Admin\Screen_Option;
-use PrashantWP\Email_Tracker\Core\Admin\Screen_Option_Hooker;
 
 use PrashantWP\Email_Tracker\Util;
 
@@ -62,16 +54,17 @@ class Setup extends \PrashantWP\Email_Tracker\Base {
     }
 
     public function menu_page() {
-        $email_list_menu_page = new Menu_Page( new Page_Viewer() );
-        $email_list_menu_page->set_page_title( esc_html__( 'Email List', 'email-tracker' ) );
-        $email_list_menu_page->set_menu_title( esc_html__( 'Email Tracker', 'email-tracker' ) );
-        $email_list_menu_page->set_capability( $this->get_cap_to_manage_all_emails() );
-        // Make change here cause to change in freemius lib call function too.
-        $email_list_menu_page->set_menu_slug( $this->get_menu_slug() );
-        $email_list_menu_page->set_icon_url( 'dashicons-email-alt' );
-
-        $menu_page_hooker = new Menu_Page_Hooker( $email_list_menu_page );
-        $menu_page_hooker->hook();
+		add_action( 'admin_menu', function () {
+			$view_page = new Page_Viewer();
+			$hook_suffix = add_menu_page(
+				esc_html__( 'Email List', 'email-tracker' ),
+				esc_html__( 'Email Tracker', 'email-tracker' ),
+				$this->get_cap_to_manage_all_emails(),
+				$this->get_menu_slug(),
+				[ $view_page, 'view' ],
+				'dashicons-email-alt'
+			);
+		} );
     }
 
     private function get_cap_to_manage_all_emails() {
@@ -134,46 +127,55 @@ class Setup extends \PrashantWP\Email_Tracker\Base {
 
     public function help_tabs() {
 
-        $overview = new Screen_Help_Tab();
-        $overview->set_id( 'emtr_email_list_help_overview' );
-        $overview->set_title( __( 'Overview', 'email-tracker' ) );
-        $overview->set_content( '<p>' . esc_html__( 'This screen provides access to all of sent emails. You can see emails read log in Read Log column.', 'email-tracker' ) . '</p>' );
-        
+		add_action( 'load-' . $this->get_hook_suffix(),  function () {
+			$screen = get_current_screen();
 
-        $available_actions = new Screen_Help_Tab();
-        $available_actions->set_id( 'emtr_email_list_help_available_actions' );
-        $available_actions->set_title( __('Available Actions', 'email-tracker' ) );
-        $available_actions->set_content( '<p>' . __( 'Hovering over a row in the posts list will display action links that allow you to manage your post. You can perform the following actions:', 'email-tracker' ) . '</p>' .
-                                    '<ul>' .
-                                        '<li><strong>' . __( 'View', 'email-tracker' ).'</strong> ' . __( 'will show you all email details.', 'email-tracker' ).'</li>' .
-                                        '<li><strong>' . __( 'Delete', 'email-tracker' ).'</strong> ' . __( 'will permanently delete email.', 'email-tracker' ).'</li>' .
-                                    '<ul>' );
-        
-        $bulk_actions = new Screen_Help_Tab();
-        $bulk_actions->set_id( 'emtr_email_list_help_bulk_actions' );
-        $bulk_actions->set_title( __( 'Bulk Actions', 'email-tracker' ) );
-        $bulk_actions->set_content( '<p>' . 
-                                        __( 'You can also delete multiple emails at once. Select the emails you want to act on using the checkboxes, then select the action you want to take from the Bulk Actions menu and click Apply.', 'email-tracker' ) .
-                                    '</p>' );
+			$screen->add_help_tab( [
+					'id'      => 'emtr_email_list_help_overview',
+					'title'   => esc_html__( 'Overview', 'email-tracker' ),
+					'content' => '<p>' . esc_html__( 'This screen provides access to all of sent emails. You can see emails read log in Read Log column.', 'email-tracker' ) . '</p>',
+				] );
 
-        $screen_help_tab_hooker = new Screen_Help_Tab_Hooker( $this->get_hook_suffix(), array(
-                                                                                            $overview,
-                                                                                            $available_actions,                                     
-                                                                                            $bulk_actions,
-                                                                                        )
-                                    );
-        $screen_help_tab_hooker->hook();
+			$screen->add_help_tab( [
+					'id'      => 'emtr_email_list_help_available_actions',
+					'title'   => esc_html__('Available Actions', 'email-tracker' ),
+					'content' => '<p>' . esc_html__( 'Hovering over a row in the posts list will display action links that allow you to manage your post. You can perform the following actions:', 'email-tracker' ) . '</p>' .
+									'<ul>' .
+									'<li><strong>' . esc_html__( 'View', 'email-tracker' ).'</strong> ' . __( 'will show you all email details.', 'email-tracker' ).'</li>' .
+									'<li><strong>' . esc_html__( 'Delete', 'email-tracker' ).'</strong> ' . __( 'will permanently delete email.', 'email-tracker' ).'</li>' .
+									'<ul>',
+				] );
+
+			$screen->add_help_tab( [
+					'id'      => 'emtr_email_list_help_bulk_actions',
+					'title'   => esc_html__( 'Bulk Actions', 'email-tracker' ),
+					'content' => '<p>' .
+						esc_html__( 'You can also delete multiple emails at once. Select the emails you want to act on using the checkboxes, then select the action you want to take from the Bulk Actions menu and click Apply.', 'email-tracker' ) .
+						'</p>',
+				] );
+
+			unset( $screen );
+		} );
     }
 
     public function help_options() {
-        $per_page_screen_option = new Screen_Option();
-        $per_page_screen_option->set_id( 'per_page' );
-        $per_page_screen_option->set_label( __('Emails per page', 'email-tracker' ) );
-        $per_page_screen_option->set_default( 50 );
-        $per_page_screen_option->set_option( 'emtr_emails_per_page' );
-    
-        $per_page_screen_option_hooker = new Screen_Option_Hooker( $this->get_hook_suffix(), $per_page_screen_option );
-        $per_page_screen_option_hooker->hook();
+		add_action( 'load-' . $this->get_hook_suffix(),  function() {
+			$screen = get_current_screen();
+			add_screen_option( 'per_page', [
+				'label' => esc_html__('Emails per page', 'email-tracker' ),
+				'default' => 50,
+				'option' => 'emtr_emails_per_page',
+			] );
+
+			unset( $screen );
+		} );
+		add_filter( 'set-screen-option', function( $status, $option, $value ) {
+			if ( 'emtr_emails_per_page' === $option ) {
+				return intval( $value );
+			} else {
+				return $value;
+			}
+		}, 10, 3 );
     }
 
     /**

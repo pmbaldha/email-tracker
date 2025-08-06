@@ -5,9 +5,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use PrashantWP\Email_Tracker\Core\Admin\Sub_Menu_Page;
-use PrashantWP\Email_Tracker\Core\Admin\Sub_Menu_Page_Hooker;
-
 final class Setup extends \PrashantWP\Email_Tracker\Base {
 
     private $menu_slug;
@@ -20,7 +17,7 @@ final class Setup extends \PrashantWP\Email_Tracker\Base {
 
     public function init() {
         $this->menu_page();
-        add_action('admin_init', array($this, 'admin_init') );
+        add_action( 'admin_init', array( $this, 'admin_init' ) );
     }
 
     public function get_menu_slug() {
@@ -32,21 +29,17 @@ final class Setup extends \PrashantWP\Email_Tracker\Base {
     }
 
     public function menu_page() {
-        $settings_sub_menu_page = new Sub_Menu_Page( new Page_Viewer( $this->get_menu_slug() ) );
-
-        $settings_sub_menu_page->set_parent_slug( 
-            $this->factory->get( '\PrashantWP\Email_Tracker\Admin\Email_List\Setup' )
-                                ->get_menu_slug()
-        );
-        $settings_sub_menu_page->set_page_title( __( 'Settings', 'email-tracker' ) );
-        $settings_sub_menu_page->set_menu_title( __( 'Settings', 'email-tracker' ) );
-
-        $settings_sub_menu_page->set_capability( 'manage_options' );
-        $settings_sub_menu_page->set_menu_slug( $this->get_menu_slug() );
-        $settings_sub_menu_page->set_pos( 2 );
-
-        $sub_menu_page_hooker = new Sub_Menu_Page_Hooker( $settings_sub_menu_page );
-        $sub_menu_page_hooker->hook();
+        add_action( 'admin_menu', function () {
+            add_submenu_page(
+                            $this->factory->get( '\PrashantWP\Email_Tracker\Admin\Email_List\Setup' )->get_menu_slug(),
+                            esc_html__( 'Settings', 'email-tracker' ),
+                            esc_html__( 'Settings', 'email-tracker' ),
+                            'manage_options',
+                            $this->get_menu_slug(),
+                            [ new Page_Viewer( $this->get_menu_slug() ), 'view' ],
+                            2
+                    );
+        } );
     }
 
     public function admin_init() {

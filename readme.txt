@@ -1,9 +1,9 @@
 === Email Tracker – Email Tracking Plugin to track Emails for Open and Email Links Click (Compatible with WooCommerce) ===
-Contributors: pmbaldha, woocommerce9, emailemailemail, freemius
-Tags: email, mail, email-woocommerce-email
+Contributors: pmbaldha, woocommerce9, emailemailemail, woocommerce, freemius
+Tags: email, mail, track, open, link
 Requires at least: 4.0
 Tested up to: 6.8.2
-Stable tag: 5.3.13
+Stable tag: 5.3.14
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -27,7 +27,7 @@ This helps you easily measure your email marketing effort.
 * Email Open (read) Tracking with date time.
 * Email link Tracking with date time.
 * Email Open IP Tracking
-* Email Link  Click IP Tracking
+* Email Link Click IP Tracking
 * Complete Email Tracking Statistics.
 * **Continuously improvement** in plugin codebase day by day.
 * **Updated regularly with new features**
@@ -123,6 +123,11 @@ The free version of the plugin can tracks email views. The Pro version of the pl
 4. Settings to manage all emails
 
 == Changelog ==
+
+= 5.3.14, August 07, 2025 =
+* COMPATIBILITY: Make the plugin code compatible with the Plugin Check Plugin (PCP).
+* FIX: PHP Notice: Function _load_textdomain_just_in_time was called <strong>incorrectly</strong>. Translation loading for the <code>email-tracker</code> domain was triggered too early. This is usually an indicator for some code in the plugin or theme running too early. Translations should be loaded at the <code>init</code> action or later. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 6.7.0.)
+* TWEAK: Simplify admin menu, submenu and help features and remove related unnecessary classes and interfaces.
 
 = 5.3.13, August 06, 2025 =
 * TWEAK: Freemius library updated to the latest version.
@@ -294,4 +299,4 @@ The free version of the plugin can tracks email views. The Pro version of the pl
 
 
 == Upgrade Notice ==
-* 1.24.13: Updated freemius library and tested with WordPress 6.8.2. A recommended update for all.
+* 5.3.14: Updated freemius library and tested with WordPress 6.8.2. A recommended update for all.

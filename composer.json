@@ -9,6 +9,6 @@
         }
     ],
     "require": {
-        "soundasleep/html2text": "~1.1"
+        "soundasleep/html2text": "^2.0"
     }
 }

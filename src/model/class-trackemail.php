@@ -15,6 +15,49 @@ if ( ! defined( 'ABSPATH' ) ) {
 use PrashantWP\Email_Tracker\Util;
 
 class TrackEmail {
+	
+	/**
+	 * Email open log table name
+	 *
+	 * @var string
+	 */
+	private $eo_table_name;
+	
+	/**
+	 * Email table name
+	 *
+	 * @var string
+	 */
+	private $email_table_name;
+	
+	/**
+	 * Email open primary key
+	 *
+	 * @var string
+	 */
+	private $eo_pk;
+	
+	/**
+	 * Email open foreign key
+	 *
+	 * @var string
+	 */
+	private $eo_fk;
+	
+	/**
+	 * Rewrite URL for email open tracking
+	 *
+	 * @var string
+	 */
+	private $rw_url_email_open;
+	
+	/**
+	 * Track interval in hours
+	 *
+	 * @var int
+	 */
+	private $track_interval;
+	
 	public function __construct() {
 		global $wpdb;
 

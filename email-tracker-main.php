@@ -183,6 +183,12 @@ function emtr_email_before_send( $orig_email ) {
 	$email         = $orig_email;
 
 	require_once EMTR_PLUGIN_PATH . 'vendor/autoload.php';
+	$message_plain = '';
+	
+	// Suppress deprecation warnings from the html2text library
+	$old_error_level = error_reporting();
+	error_reporting($old_error_level & ~E_DEPRECATED);
+	
 	try {
 		$message_plain = \Soundasleep\Html2Text::convert( $email['message'], array(
 			'ignore_errors' => true,
@@ -192,6 +198,9 @@ function emtr_email_before_send( $orig_email ) {
 	} catch ( Error $e ) {
 		// silently hide
 	}
+	
+	// Restore original error reporting level
+	error_reporting($old_error_level);
 	$email_db_data = array(
 		'to'            => emtr_extract_email_field( $email['to'] ),
 		'subject'       => $email['subject'],

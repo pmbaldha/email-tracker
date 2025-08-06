@@ -98,22 +98,53 @@ class Util {
 	public static function delete_emails( $email_ids = array()  ) {
 		global $wpdb;
 
+		if ( empty( $email_ids ) || ! is_array( $email_ids ) ) {
+			return false;
+		}
+
+		// Sanitize email IDs
+		$email_ids = array_map( 'intval', $email_ids );
+		$email_ids = array_filter( $email_ids );
+		
+		if ( empty( $email_ids ) ) {
+			return false;
+		}
+
+		// Create placeholders for IN clause
+		$placeholders = implode( ',', array_fill( 0, count( $email_ids ), '%d' ) );
+
+		// Delete from email table
 		$wpdb->query(
-			'DELETE FROM ' . self::emtr_get_table_name( 'email' ) . ' WHERE email_id IN (' . implode(',', $email_ids ) . ')'
+			$wpdb->prepare(
+				"DELETE FROM " . self::emtr_get_table_name( 'email' ) . " WHERE email_id IN ($placeholders)",
+				$email_ids
+			)
 		);
 
+		// Delete from track_email_open_log table
 		$wpdb->query(
-			'DELETE FROM ' . self::emtr_get_table_name( 'track_email_open_log' ) . ' WHERE trkemail_email_id IN ('. implode(',', $email_ids ) . ')'
+			$wpdb->prepare(
+				"DELETE FROM " . self::emtr_get_table_name( 'track_email_open_log' ) . " WHERE trkemail_email_id IN ($placeholders)",
+				$email_ids
+			)
 		);
 
+		// Delete from track_email_link_click_log table
 		$wpdb->query(
-			'DELETE FROM ' .
-					self::emtr_get_table_name( 'track_email_link_click_log' ) . ' WHERE trklinkclick_trklink_id IN (SELECT trklink_id FROM ' . self::emtr_get_table_name( 'track_email_link_master' ).' WHERE trklink_email_id IN ('.implode(',',$email_ids ).') 
-					)'
+			$wpdb->prepare(
+				"DELETE FROM " . self::emtr_get_table_name( 'track_email_link_click_log' ) . 
+				" WHERE trklinkclick_trklink_id IN (SELECT trklink_id FROM " . self::emtr_get_table_name( 'track_email_link_master' ) . 
+				" WHERE trklink_email_id IN ($placeholders))",
+				$email_ids
+			)
 		);
 
+		// Delete from track_email_link_master table
 		$wpdb->query(
-			'DELETE FROM ' . self::emtr_get_table_name( 'track_email_link_master' ) . ' WHERE trklink_email_id IN (' . implode(',', $email_ids ). ')'
+			$wpdb->prepare(
+				"DELETE FROM " . self::emtr_get_table_name( 'track_email_link_master' ) . " WHERE trklink_email_id IN ($placeholders)",
+				$email_ids
+			)
 		);
 
 		return true;

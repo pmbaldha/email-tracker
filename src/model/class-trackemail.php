@@ -148,18 +148,17 @@ class TrackEmail {
 	}
 
 	/**
-	 * GetLink()
+	 * Get tracking code
 	 *
 	 * @author Dinesh
 	 *
 	 * @param int $ldemail_id = Lead email id
 	 * @return string image tag with track url
 	 *
-	 * @ check for link for given id and return if found and return false if not found
 	 */
 	public function get_track_code( $email_id ) {
 
-		return "<img src=\"" . esc_url( get_home_url() . $this->rw_url_email_open . $email_id . '/track-log' ) . "\" alt=\"track\" />";
+		return "<img src=\"" . esc_url( get_home_url() . $this->rw_url_email_open . $email_id . '/track-log' ) . "\" style=\"display:none;\" alt=\"track\" />";
 
 	}
 

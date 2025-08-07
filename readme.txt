@@ -1,13 +1,13 @@
 === Email Tracker – Email Tracking Plugin to track Emails for Open and Email Links Click (Compatible with WooCommerce) ===
-Contributors: pmbaldha, woocommerce9, emailemailemail, woocommerce, freemius
-Tags: email, email tracking, email tracker, track email, email open tracking, email analytics, email marketing, email clicks, email notifications, email logs
+Contributors: pmbaldha, woocommerce9, emailemailemail, wordpressdotorg, woocommerce, nikunj8866, freemius
+Tags: email, mails, emails, read, tracker
 Requires at least: 4.0
 Tested up to: 6.8
-Stable tag: 5.3.14
+Stable tag: 5.3.15
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-Email Tracker is a powerful WordPress email tracking plugin that monitors all your WordPress emails, tracking email opens, email link clicks, and providing detailed email analytics for every email sent from your website.
+Track all WordPress emails - monitor opens, link clicks & get detailed analytics. Works with WooCommerce, Contact Forms & all WP emails.
 
 == Description ==
 
@@ -56,7 +56,6 @@ This comprehensive email tracking helps you measure and improve your email marke
 * **Email Client Detection** - Identify which email clients are used
 * **Email Search & Filter** - Quickly find specific emails in your logs
 * **Bulk Email Management** - Handle multiple emails efficiently
-* **Email Export Options** - Export email data for analysis
 * **Works with ALL WordPress emails** - WooCommerce emails, Contact Form emails, System emails, and more
 
 = Perfect for All Types of WordPress Emails =
@@ -78,7 +77,7 @@ This comprehensive email tracking helps you measure and improve your email marke
 * **Internal Team Emails** - Monitor internal email communications
 * **Transactional Emails** - Ensure critical emails reach recipients
 
-= Testimonials - WordPress Email Users Love Email Tracker =
+= Testimonials - WordPress Email Users Love Email Tracker (Track all WordPress Emails) =
 > Prashant, you kindly fill that gap where WP falls short, good work mate! Have a blessed day sir.<br>
 > **Mike Owocki - WooCommerce Store Owner**<br><br>
 
@@ -102,38 +101,38 @@ We provide active support to the Email Tracker plugin. We are always happy to he
 
 Email Tracker seamlessly works with all major WordPress plugins that send emails. Here are the top 25 most popular plugins that are fully compatible with Email Tracker:
 
-**E-commerce & Business:**
-* [WooCommerce](https://wordpress.org/plugins/woocommerce/) - Track all WooCommerce order emails, customer emails, and admin notifications
+= E-commerce & Business Emails: =
+* [WooCommerce or Woo](https://wordpress.org/plugins/woocommerce/) - Track all WooCommerce order emails, customer emails, and admin notifications
 * [Easy Digital Downloads](https://wordpress.org/plugins/easy-digital-downloads/) - Monitor digital product purchase emails and receipts
 * [WooCommerce Stripe Gateway](https://wordpress.org/plugins/woocommerce-gateway-stripe/) - Track payment confirmation emails
 * [WooCommerce PayPal Checkout Gateway](https://wordpress.org/plugins/woocommerce-gateway-paypal-express-checkout/) - Monitor PayPal transaction emails
 
-**Form & Contact Plugins:**
+= Form & Contact Plugins Emails: =
 * [Contact Form 7](https://wordpress.org/plugins/contact-form-7/) - Track all form submission emails
 * [WPForms](https://wordpress.org/plugins/wpforms-lite/) - Monitor form notifications and confirmations
 * [Ninja Forms](https://wordpress.org/plugins/ninja-forms/) - Track form emails and autoresponders
 * [Forminator](https://wordpress.org/plugins/forminator/) - Monitor quiz, poll, and form emails
 * [Gravity Forms](https://www.gravityforms.com/) - Track advanced form submission emails
 
-**SEO & Marketing:**
+= SEO & Marketing Emails: =
 * [Yoast SEO](https://wordpress.org/plugins/wordpress-seo/) - Track SEO-related admin emails
 * [All in One SEO](https://wordpress.org/plugins/all-in-one-seo-pack/) - Monitor SEO notification emails
 * [MonsterInsights](https://wordpress.org/plugins/google-analytics-for-wordpress/) - Track analytics report emails
 * [OptinMonster](https://wordpress.org/plugins/optinmonster/) - Monitor lead generation emails
 
-**Security & Backup:**
+= Security & Backup Emails: =
 * [Wordfence Security](https://wordpress.org/plugins/wordfence/) - Track security alert emails
-* [UpdraftPlus](https://wordpress.org/plugins/updraftplus/) - Monitor backup notification emails
+* [UpdraftPlus Backup and Migration](https://wordpress.org/plugins/updraftplus/) - Monitor backup notification emails
 * [Duplicator](https://wordpress.org/plugins/duplicator/) - Track migration and backup emails
 * [All In One WP Security](https://wordpress.org/plugins/all-in-one-wp-security-and-firewall/) - Monitor security notification emails
 
-**Performance & Utilities:**
+= Performance & Utilities Emails: =
 * [Elementor](https://wordpress.org/plugins/elementor/) - Track form submission emails from Elementor forms
-* [Jetpack](https://wordpress.org/plugins/jetpack/) - Monitor all Jetpack notification emails
+* [Jetpack – WP Security, Backup, Speed, & Growth](https://wordpress.org/plugins/jetpack/) - Monitor all Jetpack notification emails
 * [WP Mail SMTP](https://wordpress.org/plugins/wp-mail-smtp/) - Works perfectly with Email Tracker for reliable email delivery
 * [LiteSpeed Cache](https://wordpress.org/plugins/litespeed-cache/) - Track cache-related admin emails
 
-**Membership & LMS:**
+= Membership & LMS Emails: =
 * [Ultimate Member](https://wordpress.org/plugins/ultimate-member/) - Track member registration and notification emails
 * [BuddyPress](https://wordpress.org/plugins/buddypress/) - Monitor community notification emails
 * [LearnDash](https://www.learndash.com/) - Track course enrollment and completion emails
@@ -157,6 +156,14 @@ When writing about the Email Tracker plugin, please make sure to write it correc
 * email tracker (incorrect)
 * Email traker (incorrect)
 * Email tracer (incorrect)
+* Mail Tracker (incorrect)
+* Mails Tracker (incorrect)
+* Mail Trackers (incorrect)
+* Mails Trackers (incorrect)
+* MailTracker (incorrect)
+* Mail tracker (incorrect)
+* Mail traker (incorrect)
+* Mail tracer (incorrect)
 
 == Installation ==
 
@@ -208,18 +215,156 @@ Email Tracker works with any plugin that uses WordPress's native wp_mail() funct
 Email tracking itself is a technical feature. GDPR compliance depends on how you use it. We recommend informing your email recipients about email tracking in your privacy policy.
 
 = What's the difference between Free and Pro versions? =
-The Free version includes email open tracking, email logs, and basic email analytics. The Pro version adds email link click tracking, advanced email analytics, and priority support.
+The Free version includes email open tracking, email logs, and basic email analytics. The Pro version adds email link click tracking, advanced email analytics, auto-delete old emails, and priority support.
+
+= How do I install Email Tracker on my WordPress site? =
+Simply install Email Tracker through the WordPress plugin repository or upload the plugin files to your plugins directory. Once activated, Email Tracker automatically starts tracking all emails sent from your site. No configuration required!
+
+= Can I disable email tracking for specific emails? =
+Yes, you can control email tracking settings from the Email Tracker > Settings page. The Pro version offers more granular control over which emails to track.
+
+= Does Email Tracker work with multisite WordPress installations? =
+Yes, Email Tracker is fully compatible with WordPress Multisite. You can activate it network-wide or on individual sites within your network.
+
+= What happens to my email data if I deactivate the plugin? =
+Your email tracking data remains in the database when you deactivate the plugin. If you want to completely remove all data, you need to uninstall the plugin through the WordPress admin panel.
+
+= Does Email Tracker work with custom email headers? =
+Yes, Email Tracker preserves all custom email headers set by your WordPress site or plugins. It only adds tracking functionality without modifying your existing email structure.
+
+= Can I send test emails to verify tracking is working? =
+Absolutely! Use the Email Tracker > Compose Email feature to send test emails and immediately see the tracking in action through your email logs.
+
+= Is there a limit on how long email data is stored? =
+By default, Email Tracker stores all email data indefinitely. The Pro version includes an auto-delete feature to automatically remove old emails after a specified number of days.
+
+= Can I track emails sent to multiple recipients? =
+Yes, Email Tracker can handle emails sent to multiple recipients. Each recipient's email open and click activity is tracked individually.
+
+= Does Email Tracker support HTML and plain text emails? =
+Yes, Email Tracker works with both HTML and plain text emails. For plain text emails, tracking capabilities may be limited compared to HTML emails.
+
+= Can I see which email client or device was used to open my emails? =
+Yes, Email Tracker captures user agent information, allowing you to see which email clients (Gmail, Outlook, etc.) and devices (mobile, desktop) were used to open your emails.
+
+= Will email tracking work if images are blocked? =
+Email open tracking relies on images being loaded. If a recipient has images blocked in their email client, the open event won't be tracked until they enable images.
+
+= Can I track forwarded emails? =
+Email Tracker can detect when a tracked email is opened, but it cannot distinguish between the original recipient and someone the email was forwarded to.
+
+= Does Email Tracker work with SMTP plugins? =
+Yes, Email Tracker is compatible with popular SMTP plugins like WP Mail SMTP, Post SMTP, and Easy WP SMTP. It tracks emails regardless of the delivery method.
+
+= How accurate is email open tracking? =
+Email open tracking is highly accurate when images are enabled in the recipient's email client. However, some email clients may cache images or block tracking pixels, which can affect accuracy.
+
+= Can I customize the tracking pixel? =
+The tracking pixel is automatically managed by Email Tracker and cannot be customized. It's designed to be invisible and not affect your email layout.
+
+= Does Email Tracker support email bounce tracking? =
+Email Tracker focuses on open and click tracking. For bounce tracking, we recommend using it alongside an SMTP service that provides bounce management.
+
+= Can I track emails sent through cron jobs or scheduled tasks? =
+Yes, Email Tracker automatically tracks all emails sent through wp_mail(), including those triggered by cron jobs, scheduled posts, or automated tasks.
+
+= Is Email Tracker compatible with caching plugins? =
+Yes, Email Tracker is fully compatible with popular caching plugins like WP Rocket, W3 Total Cache, and WP Super Cache. The tracking endpoints are automatically excluded from cache.
+
+= Can I track email replies? =
+Email Tracker tracks when emails are opened and links are clicked, but it doesn't track email replies. Reply tracking would require integration with your email server.
+
+= Does Email Tracker work with email queue plugins? =
+Yes, Email Tracker is compatible with email queue plugins that use wp_mail() for sending. Emails will be tracked when they're actually sent from the queue.
+
+= Can multiple admin users access email tracking data? =
+Yes, any user with administrator privileges can access Email Tracker data. The Pro version allows you to grant access to other user roles as well.
+
+= How do I troubleshoot if email tracking isn't working? =
+First, ensure the plugin is activated and check the Email Tracker > Settings page. Send a test email using Email Tracker > Compose Email and check if it appears in your logs. If issues persist, check for plugin conflicts or contact support.
+
+= Does Email Tracker support custom post type notification emails? =
+Yes, as long as custom post types use wp_mail() for notifications, Email Tracker will automatically track those emails.
+
+= Can I track password reset and user registration emails? =
+Yes, Email Tracker automatically tracks all WordPress system emails including password resets, user registrations, and admin notifications.
+
+= Is Email Tracker translation ready? =
+Yes, Email Tracker is fully translation ready and includes POT files for easy translation into any language.
+
+= Can I track emails sent from WordPress REST API? =
+Yes, if your REST API endpoints use wp_mail() to send emails, Email Tracker will automatically track them.
+
+= Does Email Tracker affect email deliverability? =
+No, Email Tracker doesn't affect email deliverability. It only adds tracking features without changing your email sending configuration or authentication.
+
+= Can I bulk delete old email logs? =
+Yes, you can bulk delete email logs from the Email Tracker > Email List page. Select the emails you want to delete and use the bulk action dropdown.
+
+= How can I improve my email open rates using Email Tracker data? =
+Use Email Tracker's analytics to identify the best times to send emails, which subject lines get the most opens, and which content drives the most engagement.
+
+= Does Email Tracker support email templates? =
+While Email Tracker doesn't provide email templates, it tracks any emails sent using template plugins or custom email designs that use wp_mail().
+
+= Can I track automated WooCommerce emails? =
+Absolutely! Email Tracker automatically tracks all WooCommerce emails including order confirmations, shipping notifications, customer invoices, and account emails.
+
+= Is there an API to access email tracking data programmatically? =
+The Pro version provides hooks and filters that developers can use to access and manipulate email tracking data programmatically.
+
+= Can I track emails sent to myself for testing? =
+Yes, Email Tracker tracks all emails regardless of the recipient. This is perfect for testing your email campaigns before sending to customers.
+
+= Does Email Tracker support email scheduling? =
+Email Tracker tracks scheduled emails sent by other plugins. The Pro version includes features for scheduling tracked emails directly from the compose interface.
+
+= How do I know if my emails are going to spam? =
+While Email Tracker shows if emails are opened, consistently low open rates might indicate deliverability issues. Consider using an SMTP service for better delivery.
+
+= Can I resend emails from the email log? =
+Yes, you can resend any email from your email history. This is useful for resending important communications that may have been missed.
+
+= Does Email Tracker work with page builders? =
+Yes, Email Tracker works with all popular page builders including Elementor, Divi, Beaver Builder, and others that send emails through WordPress.
+
+= Can I customize email tracking notifications? =
+The Pro version allows you to set up custom notifications for specific email events, such as when important emails are opened or links are clicked.
+
+= Is Email Tracker compatible with PHP 8? =
+Yes, Email Tracker is fully compatible with PHP 7.0 and above, including PHP 8.0, 8.1, and 8.2.
+
+= Can I track email attachments? =
+Email Tracker logs emails with attachments and shows attachment information, but doesn't track if attachments are downloaded or opened.
+
+= Does Email Tracker support email campaigns? =
+While Email Tracker isn't a full email campaign tool, it perfectly complements campaign plugins by adding tracking capabilities to their emails.
+
+= How do I migrate email tracking data to a new site? =
+You can export your email data from the old site and import it to the new site using WordPress database migration tools or plugins.
+
+= Can I white-label Email Tracker for client sites? =
+The standard version includes Email Tracker branding. Contact support for white-label options for agency use.
+
+= Does Email Tracker track email unsubscribes? =
+Email Tracker tracks when unsubscribe links are clicked if they're included in your emails. Full unsubscribe management requires additional plugins.
+
+= Is customer support available for the free version of Email Tracker plugin? =
+Yes, we provide support for all Email Tracker users through the WordPress.org support forums. Pro users get priority support with faster response times.
 
 == Screenshots ==
 
 1. **Email List Dashboard** - View all tracked emails with open status, timestamps, and email analytics
 2. **Email Detail View** - See complete email information including content, headers, and tracking data
-3. **Email Open Tracking Log** - Detailed log showing when emails were opened, IP addresses, and user agents
+3. **Email Open Tracking Log** - Detailed email log showing when emails were opened, IP addresses, and user agents
 4. **Compose Email** - Send tracked emails directly from WordPress with full email tracking enabled
 5. **Email Link Click Tracking** - Monitor which links in your emails are clicked (Pro feature)
 6. **Email Settings** - Configure email tracking preferences and manage email data
 
 == Changelog ==
+
+= 5.3.15, August 08, 2025 =
+* FEATURE: 
 
 = 5.3.14, August 07, 2025 =
 * FIX: PHP Notice: Function _load_textdomain_just_in_time was called <strong>incorrectly</strong>. Translation loading for the <code>email-tracker</code> domain was triggered too early. This is usually an indicator for some code in the plugin or theme running too early. Translations should be loaded at the <code>init</code> action or later. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 6.7.0.)

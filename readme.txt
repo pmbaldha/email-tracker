@@ -380,8 +380,8 @@ Yes, we provide support for all Email Tracker users through the WordPress.org su
 
 == Changelog ==
 
-= 5.3.15, August 08, 2025 =
-* FEATURE: 
+= 5.3.15, August 15, 2025 =
+* FIX: Ugly whitespace at the end of email message.
 
 = 5.3.14, August 07, 2025 =
 * FIX: PHP Notice: Function _load_textdomain_just_in_time was called <strong>incorrectly</strong>. Translation loading for the <code>email-tracker</code> domain was triggered too early. This is usually an indicator for some code in the plugin or theme running too early. Translations should be loaded at the <code>init</code> action or later. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 6.7.0.)
@@ -560,4 +560,4 @@ Yes, we provide support for all Email Tracker users through the WordPress.org su
 
 
 == Upgrade Notice ==
-* 5.3.14: Updated freemius library and tested with WordPress 6.8.2. A recommended update for all.
+* 5.3.15: Fixed the issue of ugly whitespace at the end of the email message. Now, Email looks better. A recommended update for all.

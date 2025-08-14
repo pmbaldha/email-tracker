@@ -4,7 +4,6 @@
  * Plugin URI:  https://wordpress.org/plugins/email-tracker/
  * Description: Email Tracker is a WordPress plugin that lets you know if the emails you have sent have been read or not.
  * Version: 5.3.15
- * Update URI: https://api.freemius.com
  * Author: Email Expert - Email Tracker - Track Email Open (read) and Click - Mail Tracking
  * Requires at least: 4.0
  * Requires PHP: 5.6.0

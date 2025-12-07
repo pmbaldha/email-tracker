@@ -157,6 +157,41 @@ Email Tracker seamlessly works with all major WordPress plugins that send emails
 
 **And many more!** Email Tracker works with any WordPress plugin that uses the standard wp_mail() function to send emails.
 
+= SMTP & Email Delivery Plugins: =
+Email Tracker seamlessly integrates with all major SMTP and email delivery plugins for enhanced email reliability and tracking:
+
+* [WP Mail SMTP](https://wordpress.org/plugins/wp-mail-smtp/) - Perfect compatibility for tracking emails sent through any SMTP service (SendGrid, Mailgun, Amazon SES, Gmail SMTP, and more)
+* [Post SMTP Mailer/Email Log](https://wordpress.org/plugins/post-smtp/) - Full tracking support for all Post SMTP delivered emails with complete logging
+* [Easy WP SMTP](https://wordpress.org/plugins/easy-wp-smtp/) - Track all emails sent through your configured SMTP servers
+* [FluentSMTP](https://wordpress.org/plugins/fluent-smtp/) - Monitor emails delivered through multiple SMTP connections
+* [MailPoet SMTP](https://wordpress.org/plugins/mailpoet/) - Track transactional emails sent via MailPoet's sending service
+* [SendGrid](https://wordpress.org/plugins/sendgrid-email-delivery-simplified/) - Full tracking for emails delivered through SendGrid API
+* [Mailgun for WordPress](https://wordpress.org/plugins/mailgun/) - Monitor all Mailgun API delivered emails
+* [SparkPost](https://wordpress.org/plugins/sparkpost/) - Track emails sent through SparkPost email delivery service
+* [Amazon SES](https://wordpress.org/plugins/wp-ses/) - Complete tracking for AWS SES delivered emails
+* [Sendinblue](https://wordpress.org/plugins/mailin/) - Track all Sendinblue/Brevo transactional emails
+
+= Newsletter & Email Marketing Plugins: =
+Track and monitor all your email marketing campaigns and newsletters:
+
+* [MailPoet](https://wordpress.org/plugins/mailpoet/) - Track newsletter opens, automated emails, and welcome series
+* [Newsletter](https://wordpress.org/plugins/newsletter/) - Monitor all newsletter campaigns and subscriber emails
+* [MailChimp for WordPress](https://wordpress.org/plugins/mailchimp-for-wp/) - Track opt-in confirmations and automated emails
+* [Email Subscribers & Newsletters](https://wordpress.org/plugins/email-subscribers/) - Full tracking for broadcast emails and auto-responders
+* [The Newsletter Plugin](https://wordpress.org/plugins/newsletter/) - Track all newsletter sends and automated workflows
+* [SendPress Newsletters](https://wordpress.org/plugins/sendpress/) - Monitor email campaigns and subscriber notifications
+* [MailOptin](https://wordpress.org/plugins/mailoptin/) - Track lead generation emails and autoresponders
+* [Jackmail](https://wordpress.org/plugins/jackmail-newsletters/) - Full email tracking for all campaign sends
+* [Noptin](https://wordpress.org/plugins/newsletter-optin-box/) - Track newsletter broadcasts and automation emails
+* [FluentCRM](https://wordpress.org/plugins/fluent-crm/) - Monitor all CRM emails, campaigns, and sequences
+
+**Why Email Tracker Works Perfectly with SMTP & Newsletter Plugins:**
+* **Universal Compatibility** - Email Tracker hooks into WordPress's core wp_mail() function, ensuring compatibility with any properly coded email plugin
+* **No Configuration Required** - Simply activate Email Tracker alongside your SMTP or newsletter plugin - tracking starts automatically
+* **Enhanced Analytics** - Combine the delivery reliability of SMTP plugins with Email Tracker's powerful open and click tracking
+* **Complete Email Visibility** - Track both transactional emails (via SMTP) and marketing emails (via newsletter plugins) in one dashboard
+* **Zero Performance Impact** - Email Tracker adds tracking without affecting your SMTP service or newsletter sending speed
+
 = Credits =
 
 This Email Tracker plugin is created by <a href="https://prashantwp.com/" rel="friend" title="Prashant Baldha, Created Email Tracker">Prashant Baldha</a>.

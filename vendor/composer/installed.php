@@ -1,33 +1,41 @@
-<?php return array (
-  'root' => 
-  array (
-    'pretty_version' => 'dev-master',
-    'version' => 'dev-master',
-    'aliases' => 
-    array (
+<?php return array(
+    'root' => array(
+        'name' => 'prashant/email-tracker',
+        'pretty_version' => 'dev-master',
+        'version' => 'dev-master',
+        'reference' => '1b8fd6ea4ffc6e1e682ed4577c44f56f73d79fb4',
+        'type' => 'project',
+        'install_path' => __DIR__ . '/../../',
+        'aliases' => array(),
+        'dev' => true,
     ),
-    'reference' => '18628208849f05a34875e772b17d7acd85960e3b',
-    'name' => 'prashant/email-tracker',
-  ),
-  'versions' => 
-  array (
-    'prashant/email-tracker' => 
-    array (
-      'pretty_version' => 'dev-master',
-      'version' => 'dev-master',
-      'aliases' => 
-      array (
-      ),
-      'reference' => '18628208849f05a34875e772b17d7acd85960e3b',
+    'versions' => array(
+        'freemius/wordpress-sdk' => array(
+            'pretty_version' => '2.13.0',
+            'version' => '2.13.0.0',
+            'reference' => '3cbe98b5bd0b0fb5ca4df97b8088592737ea4375',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../freemius/wordpress-sdk',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'prashant/email-tracker' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => '1b8fd6ea4ffc6e1e682ed4577c44f56f73d79fb4',
+            'type' => 'project',
+            'install_path' => __DIR__ . '/../../',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'soundasleep/html2text' => array(
+            'pretty_version' => '2.1.0',
+            'version' => '2.1.0.0',
+            'reference' => '83502b6f8f1aaef8e2e238897199d64f284b4af3',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../soundasleep/html2text',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
     ),
-    'soundasleep/html2text' => 
-    array (
-      'pretty_version' => '1.1.0',
-      'version' => '1.1.0.0',
-      'aliases' => 
-      array (
-      ),
-      'reference' => '3243a7107878a61685d2eccf99918d6479e039fc',
-    ),
-  ),
 );

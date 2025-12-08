@@ -420,12 +420,13 @@ class Table extends \WP_List_Table {
          * to a custom query. The returned data will be pre-sorted, and this array
          * sorting technique would be unnecessary.
          */
-        $orderby = ( ! empty( $_REQUEST['orderby'] ) ) ? sanitize_text_field( $_REQUEST['orderby'] ) : 'date_time'; //If no sort, default to title
+        $orderby = ( ! empty( $_REQUEST['orderby'] ) ) ? sanitize_text_field( $_REQUEST['orderby'] ) : 'date_time'; // If no sort, default to title
         if( $orderby == 'view_count'  || $orderby == 'click_count')  {
             $orderby = $orderby ;
-        }
-        else {
-            $orderby = 'E.'.$orderby ;
+        } elseif ( in_array( $orderby, array( 'to', 'subject', 'date_time' ),true ) ) {
+            $orderby = 'E.'.$orderby;
+        } else {
+            $orderby = 'E.date_time';
         }
 
         $order = 'DESC';
@@ -506,7 +507,7 @@ class Table extends \WP_List_Table {
                                 ' ECL WHERE ECL.trklinkclick_email_id = E.email_id) AS click_count,	
 							( SELECT GROUP_CONCAT( trklinkclick_date_time ) FROM ' . Util::emtr_get_table_name( 'track_email_link_click_log' ) . 					  							' ECLT WHERE ECLT.trklinkclick_email_id = E.email_id ORDER BY ECLT.trklinkclick_date_time DESC) AS click_date_time
 						 FROM '.$this->table_name.' E WHERE 1 '.$wh.'ORDER BY '.$orderby.' '.$order.' LIMIT '.$per_page.' OFFSET '.(($current_page-1)*$per_page);
-        
+
         $this->items = $wpdb->get_results( $sql, ARRAY_A);
         
         /**

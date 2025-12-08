@@ -26,7 +26,7 @@ if ( is_admin() ) {
  * This is database version which is useful when we upgrade plugin
  */
 define( 'EMTR_DB_VERSION', '1.2.1' );
-define( 'EMTR_VERSION', '5.3.15' );
+define( 'EMTR_VERSION', '5.3.16' );
 /*
 * Upgrade Script
 */

@@ -172,7 +172,7 @@ function emtr_media_lib_uploader_enqueue( $hook ) {
 	if ( $hook == 'email-tracker_page_emtr_compose_email' ) {
 		wp_enqueue_style( 'emtr_compose_email_css', plugins_url( 'css/compose_email.css', EMTR_BASE_FILE_PATH ), array(), '0.1', 'all' );
 		wp_enqueue_media();
-		wp_enqueue_script( 'media_lib_uploader_js', plugins_url( 'js/media-lib-uploader.js', EMTR_BASE_FILE_PATH ), array( 'jquery' ), true );
+		wp_enqueue_script( 'media_lib_uploader_js', plugins_url( 'js/media-lib-uploader.js', EMTR_BASE_FILE_PATH ), array( 'jquery' ), '5.3.16', array( 'strategy' => 'defer', 'in_footer' => true ) );
 	}
 }
 add_action( 'admin_enqueue_scripts', 'emtr_media_lib_uploader_enqueue' );

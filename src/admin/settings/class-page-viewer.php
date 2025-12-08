@@ -18,7 +18,7 @@ class Page_Viewer implements Viewer {
     public function view() {
     ?>
         <div class="wrap" id="<?php echo esc_attr( $this->page_slug . '-admin' ); ?>">
-            <h2><?php _e( 'Settings', 'email-tracker' ); ?></h2>
+            <h2><?php esc_html_e( 'Settings', 'email-tracker' ); ?></h2>
             <?php
             $settings_errors = get_settings_errors();
             if ( is_array( $settings_errors ) && count( $settings_errors ) > 0 && $settings_errors[0]['type'] === 'success' ) {

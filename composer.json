@@ -9,6 +9,7 @@
         }
     ],
     "require": {
-        "soundasleep/html2text": "^2.0"
+        "soundasleep/html2text": "^2.0",
+        "freemius/wordpress-sdk": "^2.13"
     }
 }

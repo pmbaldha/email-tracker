@@ -137,7 +137,7 @@ final class Setup extends \PrashantWP\Email_Tracker\Base {
         }
         ?>
         <p class="description">
-            <?php _e( 'The administrator role has the right to access all emails by default.', 'email-tracker' ); ?></p>
+            <?php esc_html_e( 'The administrator role has the right to access all emails by default.', 'email-tracker' ); ?></p>
         </p>
     <?php
     }
@@ -152,7 +152,7 @@ final class Setup extends \PrashantWP\Email_Tracker\Base {
         />
         <br />
         <p class="description">
-            <?php _e( 'After deleting emails, The related links will show the 404 not found error. Please be aware of it. Generally, no one email receiver will see the email you send.', 'email-tracker' ); ?></p>
+            <?php esc_html_e( 'After deleting emails, The related links will show the 404 not found error. Please be aware of it. Generally, no one email receiver will see the email you send.', 'email-tracker' ); ?></p>
         </p>
         <?php
     }

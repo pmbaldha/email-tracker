@@ -4,7 +4,7 @@ function emtr() {
     global $emtr;
     if ( !isset( $emtr ) ) {
         // Include Freemius SDK.
-        require_once dirname( dirname( dirname( __FILE__ ) ) ) . '/libs/freemius/start.php';
+        require_once dirname( dirname( dirname( __FILE__ ) ) ) . '/vendor/freemius/wordpress-sdk/start.php';
         $emtr = fs_dynamic_init( array(
             'id'             => '1811',
             'slug'           => 'email-tracker',

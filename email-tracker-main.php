@@ -1,11 +1,11 @@
 <?php
 
 // Autoloading Vendor
-$autoloader = plugin_dir_path( EMTR_FILE ) . '/vendor/autoload.php';
+$emtr_autoloader = plugin_dir_path( EMTR_FILE ) . '/vendor/autoload.php';
 // When WordPress is loaded as composer dependecy, There will not be __DIR__/vendor/autoload.php pressent.
 // so we need to check
-if ( is_readable( $autoloader ) ) {
-	require $autoloader;
+if ( is_readable( $emtr_autoloader ) ) {
+	require $emtr_autoloader;
 }
 
 
@@ -133,7 +133,7 @@ function emtr_plugin_activate( $network_wide ) {
 		global  $wpdb;
 		$old_blog = $wpdb->blogid;
 		// Get all blog ids
-		$blogids = $wpdb->get_col( "SELECT blog_id FROM {$wpdb->blogs}" );
+		$blogids = $wpdb->get_col( "SELECT blog_id FROM {$wpdb->blogs}" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		foreach ( $blogids as $blog_id ) {
 			switch_to_blog( $blog_id );
 			// Create database table if not exists
@@ -160,6 +160,12 @@ function emtr_uninstall_cleanup() {
 emtr()->add_action( 'after_uninstall', 'emtr_uninstall_cleanup' );
 
 function emtr_email_before_send( $orig_email ) {
+    /*
+    echo '<pre>';
+    var_dump( $orig_email    );
+    die;
+    */
+
 	// multiple email address
 	if ( is_string( $orig_email['to'] ) && false !== stripos( $orig_email['to'], ',' ) ) {
 		return $orig_email;
@@ -186,8 +192,10 @@ function emtr_email_before_send( $orig_email ) {
 	$message_plain = '';
 	
 	// Suppress deprecation warnings from the html2text library
+    // phpcs:ignore WordPress.PHP.DevelopmentFunctions.prevent_path_disclosure_error_reporting -- To suppress the error.
 	$old_error_level = error_reporting();
-	error_reporting($old_error_level & ~E_DEPRECATED);
+    // phpcs:ignore WordPress.PHP.DevelopmentFunctions.prevent_path_disclosure_error_reporting -- To suppress the error.
+	error_reporting( $old_error_level & ~E_DEPRECATED );
 	
 	try {
 		$message_plain = \Soundasleep\Html2Text::convert( $email['message'], array(
@@ -198,9 +206,10 @@ function emtr_email_before_send( $orig_email ) {
 	} catch ( Error $e ) {
 		// silently hide
 	}
-	
+
 	// Restore original error reporting level
-	error_reporting($old_error_level);
+    // phpcs:ignore WordPress.PHP.DevelopmentFunctions.prevent_path_disclosure_error_reporting -- To suppress the error.
+	error_reporting( $old_error_level );
 	$email_db_data = array(
 		'to'            => emtr_extract_email_field( $email['to'] ),
 		'subject'       => $email['subject'],
@@ -210,6 +219,7 @@ function emtr_email_before_send( $orig_email ) {
 		'attachments'   => \PrashantWP\Email_Tracker\Util::emtr_extract_attachments( $email['attachments'] ),
 		'date_time'     => gmdate( 'Y-m-d H:i:s' ),
 	);
+    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 	$ret           = $wpdb->insert(
 		\PrashantWP\Email_Tracker\Util::emtr_get_table_name( 'email' ),
 		$email_db_data,
@@ -285,7 +295,7 @@ function emtr_email_before_send( $orig_email ) {
 
 			wp_mkdir_p( $email_dir );
 			// TO DO
-			file_put_contents( $email_dir . DIRECTORY_SEPARATOR . 'email-' . date( 'Y-m-d-H-i-s' ) . '.html', $str );
+			file_put_contents( $email_dir . DIRECTORY_SEPARATOR . 'email-' . gmdate( 'Y-m-d-H-i-s' ) . '.html', $str );
 		}
 	}
 
@@ -301,7 +311,6 @@ function emtr_extract_email_field( $email_field ) {
 function emtr_pre_wp_mail( $ret, $atts ) {
 	$forbid_mail = false;
 
-	// error_log( '$atts: ' . var_export( $atts, true ) );
 
 	// multiple email address
 	if ( is_string( $atts['to'] ) && false !== stripos( $atts['to'], ',' ) ) {
@@ -361,14 +370,14 @@ function emtr_custom_rewrite_basic( $wp_rewrite ) {
 }
 
 add_action( 'generate_rewrite_rules', 'emtr_custom_rewrite_basic' );
-function query_vars( $public_query_vars ) {
+function emtr_query_vars($public_query_vars ) {
 	 $public_query_vars[] = 'main_action';
 	$public_query_vars[]  = 'action';
 	$public_query_vars[]  = 'pk';
 	return $public_query_vars;
 }
 
-add_filter( 'query_vars', 'query_vars' );
+add_filter( 'query_vars', 'emtr_query_vars');
 add_action( 'parse_request', 'emtr_parse_request' );
 function emtr_parse_request( &$wp ) {
 	if ( array_key_exists( 'main_action', $wp->query_vars ) ) {
@@ -470,7 +479,7 @@ class Emtr_Mailer {
 		// replace other elements with a space
 		$text = preg_replace( array( '@</((td)|(th))@iu' ), ' $0', $text );
 		// strip all remaining HTML tags
-		$text = strip_tags( $text );
+		$text = wp_strip_all_tags( $text );
 		// trim text
 		$text = trim( $text );
 		return $text;

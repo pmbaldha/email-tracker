@@ -1,6 +1,5 @@
-import { __, _n } from '@wordpress/i18n';
 import { PanelRow, PanelBody } from '@wordpress/components';
-
+import { __, _n, sprintf } from '@wordpress/i18n';
 
 const { addFilter } = wp.hooks;
 import moment from 'moment';

@@ -1,7 +1,7 @@
-=== Email Tracker - Email Log, Email Open Tracking, Email Analytics & Email Management for WordPress Emails ===
-Contributors: pmbaldha, woocommerce9, emailemailemail, wordpressdotorg, woocommerce, nikunj8866, freemius
+=== Email Tracker ==
+Contributors: pmbaldha, nikunj8866, freemius
 Tags: email, emails, email tracking, email log, email analytics
-Requires at least: 5.0
+Requires at least: 5.6.0
 Tested up to: 6.9
 Stable tag: 5.3.16
 License: GPLv3 or later
@@ -422,12 +422,14 @@ Yes, we provide support for all Email Tracker users through the WordPress.org su
 
 == Changelog ==
 
-= 5.3.16, December 08, 2025 =
+= 5.3.16, December 10, 2025 =
 * SECURITY: The Email Tracker plugin was vulnerable to SQL Injection via the 'orderby' parameter in all versions up to, and including, 5.3.12 due to insufficient escaping on the user supplied parameter and lack of sufficient preparation on the existing SQL query. The issue was fixed.
 * TWEAK: The Freemius library has put in the vendor folder.
-* TWEAK: defer strategy and footer enque media upload JavaScript file in the compose email admin page.
+* TWEAK: Defer strategy and footer enque media upload JavaScript file in the compose email admin page.
+* TWEAK: Replace date() with gmdate() function.
 * COMPATIBILITY: Updated to html2Text lib to version 2.1.0.
-* COMPATIBILITY: Replace _e() with esc_html_e() for compatibility wuth the Plugin Check plugin.
+* COMPATIBILITY: Replace _e() with esc_html_e() for compatibility with the Plugin Check plugin.
+* COMPATIBILITY: Fix errors and warnings of the Plugin Check plugin.
 
 = 5.3.15, August 15, 2025 =
 * FIX: Ugly whitespace at the end of email message.

@@ -216,6 +216,7 @@ class Setup extends \PrashantWP\Email_Tracker\Base {
                 'all'
             );
         }
+        // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- the full plugin name is used in hook name.
         do_action( 'email-tracker/admin_enqueue_scripts' );
 
         if ( emtr()->can_use_premium_code__premium_only() ) {
@@ -252,10 +253,10 @@ class Setup extends \PrashantWP\Email_Tracker\Base {
 		}
 		$now_gmt = strtotime( gmdate("Y-m-d H:i:s", time() ) );
 		$days_ago_timestamp = $now_gmt - ( $delete_emails_after_days * 86400 );
-		$days_ago_date_time = date( 'Y-m-d H:i:s', $days_ago_timestamp );
+		$days_ago_date_time = gmdate( 'Y-m-d H:i:s', $days_ago_timestamp );
 		$limit = defined('EMTR_DELETE_EMAILS_AFTER_DAYS_BATCH_SIZE') && is_numeric(EMTR_DELETE_EMAILS_AFTER_DAYS_BATCH_SIZE) ? (int) EMTR_DELETE_EMAILS_AFTER_DAYS_BATCH_SIZE : 250;
-		$sql = $wpdb->prepare( 'SELECT email_id FROM ' . Util::emtr_get_table_name( 'email' ) . ' WHERE date_time <= %s LIMIT '.$limit.';', $days_ago_date_time );
-		$email_ids = $wpdb->get_col( $sql  );
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
+        $email_ids = $wpdb->get_col( $wpdb->prepare( "SELECT email_id FROM " . Util::emtr_get_table_name( 'email' ) . " WHERE date_time <= %s LIMIT %d;", $days_ago_date_time, $limit ) );
 
 		if ( is_array( $email_ids ) && count( $email_ids ) > 0 ) {
 			Util::delete_emails( $email_ids );
@@ -295,13 +296,17 @@ class Setup extends \PrashantWP\Email_Tracker\Base {
         $email_id = $request['id'];
 
         $sql = $wpdb->prepare( 'SELECT `to`, subject, message, message_plain, headers, attachments, date_time, '.
+                                // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
                                 '(SELECT count( trkemail_id	) FROM ' . \PrashantWP\Email_Tracker\Util::emtr_get_table_name( 'track_email_open_log' ) . ' WHERE trkemail_email_id = em.email_id) AS total_read_count, '.
+                                // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
                                 '(SELECT count( trklinkclick_id	) FROM ' . \PrashantWP\Email_Tracker\Util::emtr_get_table_name( 'track_email_link_click_log' ) . ' WHERE trklinkclick_email_id = em.email_id ) AS total_link_click_count '.
+                                // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
                                 'FROM ' . \PrashantWP\Email_Tracker\Util::emtr_get_table_name( 'email' ) . ' AS em WHERE email_id=%d', $email_id );
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared
         $email_row = $wpdb->get_row( $sql, ARRAY_A );
 
         if ( is_null( $email_row ) ) {
-            throw new Exception( 'Email can\'t be found!' );
+            throw new Exception( esc_attr( 'Email can\'t be found!' ) );
         }
         $pass_key_arr = array(
             'to',
@@ -337,24 +342,9 @@ class Setup extends \PrashantWP\Email_Tracker\Base {
 		    $ret_data['attachments'] = implode( $attachments_sep, $new_attachments_arr );
 	    }
 
-
-		/*
-		echo '<pre>';
-		print_r(WP_CONTENT_DIR);
-		echo '</pre>';
-		*/
-		// die;
-	    /*
-	    echo '<pre>';
-	    print_r($ret_data['attachments']);
-	    echo '</pre>';
-	    die;
-	    */
-
-
         $ret_data['read_log'] = array();
-        $sql = $wpdb->prepare( 'SELECT trkemail_id as read_id, trkemail_date_time as date_time, trkemail_ip_address as ip_address FROM ' . \PrashantWP\Email_Tracker\Util::emtr_get_table_name( 'track_email_open_log' ) . ' EOD WHERE EOD.trkemail_email_id = %d ORDER BY EOD.trkemail_date_time DESC', $email_id );
-        $email_open_res = $wpdb->get_results( $sql, ARRAY_A );
+        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
+        $email_open_res = $wpdb->get_results( $wpdb->prepare( "SELECT trkemail_id as read_id, trkemail_date_time as date_time, trkemail_ip_address as ip_address FROM " . \PrashantWP\Email_Tracker\Util::emtr_get_table_name( 'track_email_open_log' ) ." EOD WHERE EOD.trkemail_email_id = %d ORDER BY EOD.trkemail_date_time DESC", $email_id ), ARRAY_A );
         foreach ( $email_open_res as $row ) {
             $ret_data['read_log'][] = array(
                 'read_id' => $row['read_id'],
@@ -364,17 +354,15 @@ class Setup extends \PrashantWP\Email_Tracker\Base {
         }
 
         $ret_data['link_click_log'] = array();
-        $email_link_res = 'SELECT trkemail_date_time as date_time, trkemail_ip_address as ip_address FROM ' . \PrashantWP\Email_Tracker\Util::emtr_get_table_name( 'track_email_open_log' ) . ' EOD WHERE EOD.trkemail_email_id = E.email_id ORDER BY EOD.trkemail_date_time DESC';
-
-        $sql = $GLOBALS['wpdb']->prepare(
-            'SELECT lm.trklink_id as link_id, lm.trklink_link as link, lc.trklinkclick_date_time as date_time, lc.trklinkclick_ip_address as ip_address '.
-                'FROM ' . \PrashantWP\Email_Tracker\Util::emtr_get_table_name( 'track_email_link_master' ) . ' lm LEFT JOIN ' . \PrashantWP\Email_Tracker\Util::emtr_get_table_name( 'track_email_link_click_log' ) . ' lc '.
-                    ' ON lm.trklink_id = lc.trklinkclick_trklink_id '.
-                'WHERE lm.trklink_email_id = %d '.
-                'ORDER BY lm.trklink_id ASC, lc.trklinkclick_date_time DESC;',
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
+        $email_link_res = $wpdb->get_results( $wpdb->prepare(
+            "SELECT lm.trklink_id as link_id, lm.trklink_link as link, lc.trklinkclick_date_time as date_time, lc.trklinkclick_ip_address as ip_address " .
+            "FROM " . \PrashantWP\Email_Tracker\Util::emtr_get_table_name( 'track_email_link_master' ) . " lm LEFT JOIN " . \PrashantWP\Email_Tracker\Util::emtr_get_table_name( 'track_email_link_click_log' ) . " lc " . // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+            " ON lm.trklink_id = lc.trklinkclick_trklink_id " .
+            "WHERE lm.trklink_email_id = %d " .
+            "ORDER BY lm.trklink_id ASC, lc.trklinkclick_date_time DESC;",
             $email_id
-        );
-        $email_link_res = $GLOBALS['wpdb']->get_results( $sql, ARRAY_A );
+        ), ARRAY_A );
 
         foreach ( $email_link_res as $row ) {
             $ret_data['link_click_log'][] = array(

@@ -1,4 +1,4 @@
-<?php
+<?php // phpcs:ignoreFile
 /**
  * To delete plugin
  *
@@ -21,36 +21,42 @@ function emtr_delete_table() {
 	 * Delete email list database table
 	 */
 	$tableName = \PrashantWP\Email_Tracker\Util::emtr_get_table_name( 'email' );
-	$wpdb->query( "DROP TABLE IF EXISTS `$tableName`" );
+    // phpcs:ignore  WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- No need of wpdb prepare statement.
+	$wpdb->query( "DROP TABLE IF EXISTS {$tableName};" );
 
 	/**
 	 * Delete email track database table
 	 */
-	$tableName = \PrashantWP\Email_Tracker\Util::emtr_get_table_name( 'track_email_open_log' );
-	$wpdb->query( "DROP TABLE IF EXISTS `$tableName`" );
+    $tableName = \PrashantWP\Email_Tracker\Util::emtr_get_table_name( 'track_email_open_log' );
+    // phpcs:ignore  WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- No need of wpdb prepare statement.
+    $wpdb->query( "DROP TABLE IF EXISTS {$tableName};" );
 
 	/**
 	 * Delete email track_email_link_master database table
 	 */
 	$tableName = \PrashantWP\Email_Tracker\Util::emtr_get_table_name( 'track_email_link_master' );
-	$wpdb->query( "DROP TABLE IF EXISTS `$tableName`" );
+    // phpcs:ignore  WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- No need of wpdb prepare statement.
+    $wpdb->query( "DROP TABLE IF EXISTS {$tableName};" );
 
 	/**
 	 * Delete email track_email_link_master database table
 	 */
 	$tableName = \PrashantWP\Email_Tracker\Util::emtr_get_table_name( 'track_email_link_click_log' );
-	$wpdb->query( "DROP TABLE IF EXISTS `$tableName`" );
+    // phpcs:ignore  WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- No need of wpdb prepare statement.
+    $wpdb->query( "DROP TABLE IF EXISTS {$tableName};" );
 
 	/**
 	 * Delete email track database table
 	 */
 	$tableName = \PrashantWP\Email_Tracker\Util::emtr_get_table_name( 'track_email_open_log' );
-	$wpdb->query( "DROP TABLE IF EXISTS `$tableName`" );
+    // phpcs:ignore  WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- No need of wpdb prepare statement.
+    $wpdb->query( "DROP TABLE IF EXISTS {$tableName};" );
 
 	/**
 	 * Delete email list per page screen option value
 	 */
-	$wpdb->query( 'DELETE FROM ' . $wpdb->prefix . "usermeta WHERE meta_key='emtr_emails_per_page'" );
+    // phpcs:ignore  WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- No need of wpdb prepare statement.
+	$wpdb->query( "DELETE FROM " . $wpdb->prefix . "usermeta WHERE meta_key='emtr_emails_per_page'" );
 
 	delete_option( \PrashantWP\Email_Tracker\Util::get_factory()->get( '\PrashantWP\Email_Tracker\Options' )->get_option_name() );
 	/**
@@ -61,9 +67,9 @@ function emtr_delete_table() {
 
 }
 
-$all_roles = $GLOBALS['wp_roles']->role_names;
-foreach ( $all_roles as $role_key => $role_val ) {
-	$ret = wp_roles()->remove_cap( $role_key, EMTR_MANAGE_ALL_EMAILS_CAP );
+$emtr_all_roles = $GLOBALS['wp_roles']->role_names;
+foreach ($emtr_all_roles as $emtr_role_key => $role_val ) {
+	$ret = wp_roles()->remove_cap( $emtr_role_key, EMTR_MANAGE_ALL_EMAILS_CAP );
 }
 
 $is_network_deactivation = fs_is_network_admin();
@@ -71,7 +77,7 @@ if ( function_exists( 'is_multisite' ) && is_multisite() && $is_network_deactiva
 	global $wpdb;
 	$old_blog = $wpdb->blogid;
 	// Get all blog ids
-	$blogids = $wpdb->get_col( "SELECT blog_id FROM $wpdb->blogs" );
+	$blogids = $wpdb->get_col( "SELECT blog_id FROM " . $wpdb->blogs );
 	foreach ( $blogids as $blog_id ) {
 		switch_to_blog( $blog_id );
 		emtr_delete_table();

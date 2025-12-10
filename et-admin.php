@@ -44,22 +44,24 @@ function emtr_compose_email_screen_options() {
 }
 
 function emtr_render_compose_email() {
+    // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 	if ( 'POST' == $_SERVER['REQUEST_METHOD'] && ! empty( $_POST['action'] ) && $_POST['action'] == 'emtr_send_mail' && wp_verify_nonce( $_POST['_wpnonce'], 'emtr_compose_email' ) ) {
 
 		if ( isset( $_POST['to'] ) ) {
-			$to = sanitize_text_field( $_POST['to'] );
+			$to = sanitize_text_field( wp_unslash( $_POST['to'] ) );
 		}
 		if ( isset( $_POST['subject'] ) ) {
-			$subject = sanitize_text_field( $_POST['subject'] );
+			$subject = sanitize_text_field( wp_unslash( $_POST['subject'] ) );
 		}
 		if ( isset( $_POST['message'] ) ) {
 			// message may be content of html tags
-			$message = wp_kses_post( $_POST['message'] );
+			$message = wp_kses_post( wp_unslash( $_POST['message'] ) );
 		}
 
         $arr_attachments = array();
 		if ( isset( $_POST['attachments'] ) ) {
-			$arr_attachments_url = explode( ',', $_POST['attachments'] );
+            // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized in next line.
+			$arr_attachments_url = explode( ',', wp_unslash( $_POST['attachments'] ) );
 			$arr_attachments_url = array_map( 'sanitize_text_field', $arr_attachments_url );
 			$arr_attachments     = array();
 			foreach ( $arr_attachments_url as $attach_url ) {
@@ -179,12 +181,12 @@ add_action( 'admin_enqueue_scripts', 'emtr_media_lib_uploader_enqueue' );
 
 /* To resolve header already sent error */
 function emtr_output_buffer_start() {
-	if ( isset( $_GET['page'] ) && $_GET['page'] == 'emtr_email_list'
+	if ( isset( $_GET['page'] ) && $_GET['page'] == 'emtr_email_list' // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- no need of nonce verification here.
 		&&
 		(
-			( isset( $_GET['action'] ) && $_GET['action'] == 'delete' )
+			( isset( $_GET['action'] ) && $_GET['action'] == 'delete' ) // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- no need of nonce verification here.
 			||
-			( isset( $_GET['action2'] ) && $_GET['action2'] == 'delete' )
+			( isset( $_GET['action2'] ) && $_GET['action2'] == 'delete' )  // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- no need of nonce verification here.
 		)
 	 ) {
 		ob_start();

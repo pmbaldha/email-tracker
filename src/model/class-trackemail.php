@@ -89,11 +89,11 @@ class TrackEmail {
 	public function insert_email_open_log( $POST ) {
 		global $wpdb;
 
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is safely generated
-		$rs_email_cnt = $wpdb->get_var(
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Table name is safely generated
+		$rs_email_cnt = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery, PluginCheck.Security.DirectDB.UnescapedDBParameter
 			$wpdb->prepare(
-				"SELECT count(*) FROM {$this->email_table_name} WHERE email_id=%d",
-				intval( $POST['trkemail_email_id'] )
+				"SELECT count(*) FROM ". $this->email_table_name . " WHERE email_id = %d", // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+				intval( sanitize_text_field( $POST['trkemail_email_id'] ) )
 			)
 		);
 
@@ -113,28 +113,29 @@ class TrackEmail {
 		$param = 'AND ' . $this->eo_fk . ' = %s AND trkemail_date_time > %s';
 
 		// Get record
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is safely generated
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		$rs_cnt = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT count(*) FROM {$this->eo_table_name} WHERE 1 {$param}",
-				$POST[ $this->eo_fk ],
+            // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
+			$wpdb->prepare("SELECT count(*) FROM " . $this->eo_table_name . " WHERE 1 {$param}",
+                sanitize_text_field( $POST[ $this->eo_fk ] ),
 				$interval_date_time
 			)
 		);
 
 		if ( $rs_cnt == 0 ) {
 			$arr_insert = array(
-				$this->eo_fk               => $POST[ $this->eo_fk ],
-				'trkemail_tacked_by'       => $POST['trkemail_tacked_by'],
-				'trkemail_http_user_agent' => sanitize_text_field( $_SERVER['HTTP_USER_AGENT'] ),
+				$this->eo_fk               => intval( sanitize_text_field( wp_unslash(  $POST[ $this->eo_fk ] ) ) ), // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+				'trkemail_tacked_by'       => sanitize_text_field( wp_unslash( $POST['trkemail_tacked_by'] ) ),
+				'trkemail_http_user_agent' => !empty( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ) : '',
 				'trkemail_ip_address'      => $this->get_client_ip(),
 				'trkemail_date_time'       => gmdate( 'Y-m-d H:i:s' ),
 			);
-
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 			$wpdb->insert(
 				$this->eo_table_name,
 				$arr_insert,
 				array(
+                    '%d',
 					'%s',
 					'%s',
 					'%s',
@@ -181,7 +182,7 @@ class TrackEmail {
 					Util::emtr_get_table_name( 'track_email_link_click_log' ),
 					array(
 						'trklinkclick_date_time'       => gmdate( 'Y-m-d H:i:s' ),
-						'trklinkclick_http_user_agent' => sanitize_text_field( $_SERVER['HTTP_USER_AGENT'] ),
+						'trklinkclick_http_user_agent' => !empty( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ) : '',
 						'trklinkclick_ip_address'      => self::get_client_ip(),
 						'trklinkclick_trklink_id'      => $link_id,
 						'trklinkclick_email_id'        => $email_id,
@@ -215,7 +216,7 @@ class TrackEmail {
 			$arr_insert = array(
 				'trkemail_email_id'        => $email_id,
 				'trkemail_tacked_by'       => 'link',
-				'trkemail_http_user_agent' => $_SERVER['HTTP_USER_AGENT'],
+				'trkemail_http_user_agent' => !empty( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ) : '',
 				'trkemail_ip_address'      => $this->get_client_ip(),
 				'trkemail_date_time'       => gmdate( 'Y-m-d H:i:s' ),
 			);
@@ -249,7 +250,7 @@ class TrackEmail {
 		$link = $GLOBALS['wpdb']
 				->get_var(
 					$GLOBALS['wpdb']->prepare(
-						'SELECT trklink_link FROM ' . $GLOBALS['wpdb']->prefix . 'emtr_track_email_link_master WHERE trklink_id=%d',
+						'SELECT trklink_link FROM ' . $GLOBALS['wpdb']->prefix . 'emtr_track_email_link_master WHERE trklink_id = %d',
 						intval( $pk )
 					)
 				);
@@ -331,7 +332,7 @@ class TrackEmail {
 				'SELECT E.*,
 							(SELECT count(*) FROM ' . Util::emtr_get_table_name( 'track_email_open_log' ) . ' EOC WHERE EOC.trkemail_email_id = E.email_id) AS view_count,
 							(SELECT GROUP_CONCAT(trkemail_date_time) FROM ' . Util::emtr_get_table_name( 'track_email_open_log' ) . ' EOD WHERE EOD.trkemail_email_id = E.email_id ORDER BY EOD.trkemail_date_time DESC) AS view_date_time 
-						 FROM ' . Util::emtr_get_table_name( 'email' ) . ' E WHERE 1 AND E.email_id=%d',
+						 FROM ' . Util::emtr_get_table_name( 'email' ) . ' E WHERE 1 AND E.email_id = %d',
 				$email_id
 			),
 			ARRAY_A
@@ -360,7 +361,7 @@ class TrackEmail {
 
 		foreach ( $fields as $ip_field ) {
 			if ( ! empty( $_SERVER[ $ip_field ] ) ) {
-				$ret_ip = $_SERVER[ $ip_field ];
+				$ret_ip = sanitize_text_field( wp_unslash( $_SERVER[ $ip_field ] ) );
 				break;
 			}
 		}

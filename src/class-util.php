@@ -114,34 +114,41 @@ class Util {
 		$placeholders = implode( ',', array_fill( 0, count( $email_ids ), '%d' ) );
 
 		// Delete from email table
+        // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$wpdb->query(
 			$wpdb->prepare(
+                // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
 				"DELETE FROM " . self::emtr_get_table_name( 'email' ) . " WHERE email_id IN ($placeholders)",
 				$email_ids
 			)
 		);
 
 		// Delete from track_email_open_log table
+        // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$wpdb->query(
 			$wpdb->prepare(
-				"DELETE FROM " . self::emtr_get_table_name( 'track_email_open_log' ) . " WHERE trkemail_email_id IN ($placeholders)",
+                // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				"DELETE FROM ". self::emtr_get_table_name( 'track_email_open_log' ) . " WHERE trkemail_email_id IN ($placeholders)",
 				$email_ids
 			)
 		);
 
 		// Delete from track_email_link_click_log table
+        // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$wpdb->query(
 			$wpdb->prepare(
-				"DELETE FROM " . self::emtr_get_table_name( 'track_email_link_click_log' ) . 
-				" WHERE trklinkclick_trklink_id IN (SELECT trklink_id FROM " . self::emtr_get_table_name( 'track_email_link_master' ) . 
-				" WHERE trklink_email_id IN ($placeholders))",
+				"DELETE FROM " . self::emtr_get_table_name( 'track_email_link_click_log' ) . // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+				" WHERE trklinkclick_trklink_id IN (SELECT trklink_id FROM " . self::emtr_get_table_name( 'track_email_link_master' ) .  // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+				" WHERE trklink_email_id IN ($placeholders))",  // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
 				$email_ids
 			)
 		);
 
 		// Delete from track_email_link_master table
+        // phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$wpdb->query(
 			$wpdb->prepare(
+                // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
 				"DELETE FROM " . self::emtr_get_table_name( 'track_email_link_master' ) . " WHERE trklink_email_id IN ($placeholders)",
 				$email_ids
 			)

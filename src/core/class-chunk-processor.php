@@ -158,16 +158,15 @@ class Chunk_Processor {
 		global $wpdb;
 		
 		$days_old = isset( $progress['data']['days_old'] ) ? $progress['data']['days_old'] : 30;
-		$date_threshold = date( 'Y-m-d H:i:s', strtotime( "-{$days_old} days" ) );
+		$date_threshold = gmdate( 'Y-m-d H:i:s', strtotime( "-{$days_old} days" ) );
 		
 		$table_name = $wpdb->prefix . 'emtr_email_logs';
 		
 		// Get emails to delete
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		$emails = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT id FROM {$table_name} 
-				WHERE created_at < %s 
-				LIMIT %d OFFSET %d",
+            // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table_name is safe var val.
+			$wpdb->prepare("SELECT id FROM {$table_name} WHERE created_at < %s LIMIT %d OFFSET %d", // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				$date_threshold,
 				$chunk_size,
 				$offset
@@ -182,27 +181,20 @@ class Chunk_Processor {
 		$placeholders = implode( ',', array_fill( 0, count( $email_ids ), '%d' ) );
 		
 		// Delete related data
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$wpdb->query(
 			$wpdb->prepare(
+                // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
 				"DELETE FROM {$wpdb->prefix}emtr_email_open_logs WHERE email_id IN ($placeholders)",
 				$email_ids
 			)
 		);
-		
-		$wpdb->query(
-			$wpdb->prepare(
-				"DELETE FROM {$wpdb->prefix}emtr_email_click_logs WHERE email_id IN ($placeholders)",
-				$email_ids
-			)
-		);
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$wpdb->query( $wpdb->prepare("DELETE FROM {$wpdb->prefix}emtr_email_click_logs WHERE email_id IN ($placeholders)", $email_ids ) );
 		
 		// Delete emails
-		$deleted = $wpdb->query(
-			$wpdb->prepare(
-				"DELETE FROM {$table_name} WHERE id IN ($placeholders)",
-				$email_ids
-			)
-		);
+        // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
+		$deleted = $wpdb->query( $wpdb->prepare( "DELETE FROM {$table_name} WHERE id IN ($placeholders)",	$email_ids ) );
 		
 		return count( $emails );
 	}
@@ -226,11 +218,10 @@ class Chunk_Processor {
 		}
 		
 		// Get emails to export
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		$emails = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT * FROM {$table_name} 
-				ORDER BY id DESC 
-				LIMIT %d OFFSET %d",
+            // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
+			$wpdb->prepare("SELECT * FROM {$table_name} ORDER BY id DESC LIMIT %d OFFSET %d",
 				$chunk_size,
 				$offset
 			),
@@ -242,6 +233,7 @@ class Chunk_Processor {
 		}
 		
 		// Append to CSV file
+        // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
 		$handle = fopen( $export_file, 'a' );
 		
 		if ( $offset === 0 ) {
@@ -252,7 +244,7 @@ class Chunk_Processor {
 		foreach ( $emails as $email ) {
 			fputcsv( $handle, $email );
 		}
-		
+        // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
 		fclose( $handle );
 		
 		return count( $emails );
@@ -274,7 +266,7 @@ class Chunk_Processor {
 		if ( ! file_exists( $import_file ) ) {
 			return 0;
 		}
-		
+        // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
 		$handle = fopen( $import_file, 'r' );
 		
 		// Skip to offset
@@ -297,10 +289,11 @@ class Chunk_Processor {
 			$data = array_combine( $headers, $row );
 			
 			// Insert email
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 			$wpdb->insert( $table_name, $data );
 			$processed++;
 		}
-		
+        // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
 		fclose( $handle );
 		
 		return $processed;

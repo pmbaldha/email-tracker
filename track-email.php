@@ -13,10 +13,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-$Action = sanitize_text_field( get_query_var( 'action', '' ) );
-$PK     = intval( get_query_var( 'pk', '' ) );
+$emtr_action = sanitize_text_field( get_query_var( 'action', '' ) );
+$emtr_pk     = intval( get_query_var( 'pk', '' ) );
 
-if ( $PK == 0 ) {
+if ( $emtr_pk == 0 ) {
 	die;
 } 
 
@@ -24,10 +24,10 @@ if ( $PK == 0 ) {
  * Display email track image
  */
 // If email has been opened
-if ( $Action == 'o' ) {
+if ( $emtr_action == 'o' ) {
 	// Add Email Open Log
-	$POST['trkemail_email_id'] = $PK;
-	\PrashantWP\Email_Tracker\Factory::get( '\PrashantWP\Email_Tracker\Model\TrackEmail' )->insert_email_open_log( $POST );
+	$EMTR_POST['trkemail_email_id'] = $emtr_pk;
+	\PrashantWP\Email_Tracker\Factory::get( '\PrashantWP\Email_Tracker\Model\TrackEmail' )->insert_email_open_log( $EMTR_POST );
 
 	/*
 	$filename = __DIR__ . '/images/track-log.png';
@@ -41,17 +41,17 @@ if ( $Action == 'o' ) {
 	header( 'Expires: 0' );
 	header( 'Content-Length: ' . 921 );
 	// track-log.png base64 encoded value
-    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped - track-log.png file base64-encoded value so no need of escaping.
-	echo base64_decode( "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAFoEvQfAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NUQ4RTg0RkQxQjZBMTFFM0EyMjZEMEI1RDQxQTNEODgiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NUQ4RTg0RkUxQjZBMTFFM0EyMjZEMEI1RDQxQTNEODgiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo1RDhFODRGQjFCNkExMUUzQTIyNkQwQjVENDFBM0Q4OCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo1RDhFODRGQzFCNkExMUUzQTIyNkQwQjVENDFBM0Q4OCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PmpagdgAAAANSURBVHjaY/7//z8DAAkLAwFJ9B4LAAAAAElFTkSuQmCC" );
+    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- track-log.png base64 decode.
+    echo base64_decode( esc_html( "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAFoEvQfAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NUQ4RTg0RkQxQjZBMTFFM0EyMjZEMEI1RDQxQTNEODgiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NUQ4RTg0RkUxQjZBMTFFM0EyMjZEMEI1RDQxQTNEODgiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo1RDhFODRGQjFCNkExMUUzQTIyNkQwQjVENDFBM0Q4OCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo1RDhFODRGQzFCNkExMUUzQTIyNkQwQjVENDFBM0Q4OCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PmpagdgAAAANSURBVHjaY/7//z8DAAkLAwFJ9B4LAAAAAElFTkSuQmCC" ) );
 	die;
-} elseif ( $Action == 'l' ) {
+} elseif ( $emtr_action == 'l' ) {
 
-	$model_trackemail = \PrashantWP\Email_Tracker\Factory::get( '\PrashantWP\Email_Tracker\Model\TrackEmail' );
-	$link = $model_trackemail->get_link( $PK );
+	$emtr_model_trackemail = \PrashantWP\Email_Tracker\Factory::get( '\PrashantWP\Email_Tracker\Model\TrackEmail' );
+	$link = $emtr_model_trackemail->get_link( $emtr_pk );
 	if ( $link != false ) {
 		if ( emtr()->is__premium_only() ) {
 			if ( emtr()->is_plan( 'pro', true ) || emtr()->is_trial() ) {
-				$model_trackemail->insert_link_click_log( $PK );
+				$emtr_model_trackemail->insert_link_click_log( $emtr_pk );
 			}
 		}
 		$link = html_entity_decode( $link );

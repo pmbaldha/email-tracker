@@ -102,7 +102,7 @@ class Name_Space_Auto_Loader {
 		}
 
 
-		throw new Exception( 'namespace ' . $namespace_class . ' can\'t be found! Path parsed: ' . $full_path );
+		throw new Exception( esc_html( 'namespace ' . $namespace_class . ' can\'t be found! Path parsed: ' . $full_path ) );
 	}
 
 	public function shutdown() {

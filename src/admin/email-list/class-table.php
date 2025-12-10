@@ -148,8 +148,8 @@ class Table extends \WP_List_Table {
 				}
 				return $str_attach;
 				
-            default:
-                return print_r($item,true); //Show the whole array for troubleshooting purposes
+            /*default:
+                return print_r($item,true); //Show the whole array for troubleshooting purposes*/
         }
     }
 
@@ -293,22 +293,27 @@ class Table extends \WP_List_Table {
         if ( 'delete' === $this->current_action() ) {
 			// Bulk Delete
             if ( isset( $_GET['action2'] ) && 'delete' == $_GET['action2'] ) {
+                // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- No need of validation and unslash because of nonce verification logic.
                 if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'],  'emtr-email-list-filter') ) {
-                    die( 'Security issue1' );
+                    die( 'Security issue!' );
                 }
             } else { // Single Email Delete action
+                //phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated -- type casted to int.
 				$email_id = intval( $_GET['email'] );
+                // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- No need of validation and unslash because of nonce verification logic.
                 if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'emtr-email-list-delete-' . $email_id ) ) {
-                    die( 'Security issue2' );
+                    die( 'Security issue!!' );
                 }
             }
 
 			global $wpdb;
 
-            if ( is_array( $_GET['email'] ) ) {
-                $arr_email_id = array_map( 'sanitize_text_field', $_GET['email'] );
+            if ( is_array( $_GET['email'] ) ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+                // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+                $arr_email_id = array_map( 'sanitize_text_field', wp_unslash( $_GET['email'] ) );
             } else {
-			    $arr_email_id = (array) sanitize_text_field( $_GET['email'] );
+                // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+			    $arr_email_id = (array) sanitize_text_field( wp_unslash( $_GET['email'] ) );
             }
 
             $arr_email_id = array_map( 'intval', $arr_email_id );
@@ -330,8 +335,6 @@ class Table extends \WP_List_Table {
 				wp_safe_redirect( wp_get_referer() );
 				exit;
 			}
-			
-            //wp_die('Items deleted (or they would be if we had items to delete)!');
         }
         
     }
@@ -420,7 +423,7 @@ class Table extends \WP_List_Table {
          * to a custom query. The returned data will be pre-sorted, and this array
          * sorting technique would be unnecessary.
          */
-        $orderby = ( ! empty( $_REQUEST['orderby'] ) ) ? sanitize_text_field( $_REQUEST['orderby'] ) : 'date_time'; // If no sort, default to title
+        $orderby = ( ! empty( $_REQUEST['orderby'] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST['orderby'] ) ) : 'date_time'; // If no sort, default to title
         if( $orderby == 'view_count'  || $orderby == 'click_count')  {
             $orderby = $orderby ;
         } elseif ( in_array( $orderby, array( 'to', 'subject', 'date_time' ),true ) ) {
@@ -431,7 +434,7 @@ class Table extends \WP_List_Table {
 
         $order = 'DESC';
         if ( ! empty( $_REQUEST['order'] ) ) {
-            $order_input = sanitize_text_field( $_REQUEST['order'] );
+            $order_input = sanitize_text_field( wp_unslash( $_REQUEST['order'] ) );
             if ( ! in_array( $order_input, array( 'ASC', 'DESC' ) ) ) {
                 $order = $order_input;
             }
@@ -460,15 +463,17 @@ class Table extends \WP_List_Table {
 		
 		//For search
 		if( isset( $_REQUEST['s'] ) && ! empty( $_REQUEST['s'] ) ) {
+            // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- No need of validation and unslash because of nonce verification logic.
             if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'emtr-email-list-filter' ) ) {
                 die( 'Security issue' );
             }
             
-            $search_text = sanitize_text_field( $_REQUEST['s'] );
+            $search_text = sanitize_text_field( wp_unslash( $_REQUEST['s'] ) );
 			
 			$wh_arr = array();
          	$arr_search_field = array( 'to', 'subject', 'message_plain', 'headers', 'attachments' );
 			foreach ( $arr_search_field as $field ) {
+                // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 				$wh_arr[] = $wpdb->prepare( ' E.' . $field . ' LIKE %s', '%' . $wpdb->esc_like( $search_text ) . '%' );
 			}
 			$wh = ' AND (' . implode( ' OR ' , $wh_arr). ')';
@@ -482,6 +487,7 @@ class Table extends \WP_List_Table {
          * in your own package classes.
          */
 		//$total_items = count($data);
+        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		$total_items = $wpdb->get_var( 'SELECT count(*) FROM '.$this->table_name.' E WHERE 1 ' . $wh );
         
         
@@ -505,9 +511,10 @@ class Table extends \WP_List_Table {
                                 ' EOD WHERE EOD.trkemail_email_id = E.email_id ORDER BY EOD.trkemail_date_time DESC) AS view_date_time,
 							( SELECT count(*) FROM ' . Util::emtr_get_table_name( 'track_email_link_click_log' ) .
                                 ' ECL WHERE ECL.trklinkclick_email_id = E.email_id) AS click_count,	
-							( SELECT GROUP_CONCAT( trklinkclick_date_time ) FROM ' . Util::emtr_get_table_name( 'track_email_link_click_log' ) . 					  							' ECLT WHERE ECLT.trklinkclick_email_id = E.email_id ORDER BY ECLT.trklinkclick_date_time DESC) AS click_date_time
+							( SELECT GROUP_CONCAT( trklinkclick_date_time ) FROM ' . Util::emtr_get_table_name( 'track_email_link_click_log' ) .
+            ' ECLT WHERE ECLT.trklinkclick_email_id = E.email_id ORDER BY ECLT.trklinkclick_date_time DESC) AS click_date_time
 						 FROM '.$this->table_name.' E WHERE 1 '.$wh.'ORDER BY '.$orderby.' '.$order.' LIMIT '.$per_page.' OFFSET '.(($current_page-1)*$per_page);
-
+        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
         $this->items = $wpdb->get_results( $sql, ARRAY_A);
         
         /**

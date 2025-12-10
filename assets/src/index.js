@@ -1,10 +1,10 @@
 
-import { render, unmountComponentAtNode, Fragment, Component } from '@wordpress/element';
+import { createRoot, unmountComponentAtNode, Fragment, Component } from '@wordpress/element';
 import { ButtonGroup, Button, Dashicon, Modal, Panel, PanelRow, PanelBody, Spinner } from '@wordpress/components';
 
 const { applyFilters } = wp.hooks;
 import apiFetch from '@wordpress/api-fetch';
-import { __, _n } from '@wordpress/i18n';
+import { __, _n, sprintf } from '@wordpress/i18n';
 
 import moment from 'moment';
 
@@ -38,8 +38,8 @@ class EmailModalView extends Component {
                 ...res,
                 isLoading: false,
             });
-            
-            
+
+
         }, (error) => {
             this.setState( {
                isLoading: false,
@@ -92,24 +92,25 @@ class EmailModalView extends Component {
                 read_log_panel_body = (
                     <PanelRow>
                         <ol>
-                            { this.state.read_log.map( read_log => {
+
+                            { this.state.read_log.map( (read_log, index) => {
                                     let read_local_moment = moment.utc( read_log.date_time ).local();
                                     return (
-                                        <li>
+                                        <li key={index}>
                                             { sprintf( __( 'Read at %s on IP %s', 'email-tracker'), read_local_moment.format( 'MMMM Do YYYY, dddd, h:mm:ss a' ) + ' (' + read_local_moment.fromNow() + ')', read_log.ip_address )}
                                         </li>
                                         )
                                 }
-                            )}
+                            ) }
                         </ol>
                     </PanelRow> );
             } else {
                 read_log_panel_body = __( 'N/A', 'email-tracker' );
             }
-            
+
             let state = this.state;
             let extra_panel = applyFilters( 'email-tracker-view-email-extra-panel', null, state );
-            
+
             modalBody = (
                 <Fragment>
                     <Panel header={ __( 'Email Receiver Activity Log', 'email-tracker') }>
@@ -126,19 +127,19 @@ class EmailModalView extends Component {
                         <PanelBody title={ "Send Date Time" } initialOpen={ true }>
                             <PanelRow>{ moment_local_email.format( 'MMMM Do YYYY, dddd, h:mm:ss a' ) } ({ moment_local_email.fromNow() })</PanelRow>
                         </PanelBody>
-                        { this.state.headers && 
+                        { this.state.headers &&
                                     <PanelBody title={ "Headers" } initialOpen={ true }>
                                         <PanelRow>{ ( this.state.headers ) }</PanelRow>
                                     </PanelBody>
                         }
-                        { this.state.attachments && 
+                        { this.state.attachments &&
                                 <PanelBody title={ "Attachments" } initialOpen={ true }>
                                     <PanelRow>
-                                        { this.state.attachments.split(",\\n").map( attachment => {
+                                        { this.state.attachments.split(",\\n").map( (attachment, index) => {
                                             let attachment_url = email_tracker.content_url + attachment;
                                             let attachment_split = attachment.split("/");
                                             return (
-                                                    <Fragment>
+                                                    <Fragment key={index}>
                                                         <a href={attachment_url} target="_blank">{attachment_split[attachment_split.length - 1]}</a>
                                                     </Fragment>
                                                 );
@@ -148,7 +149,7 @@ class EmailModalView extends Component {
                         }
                         <PanelBody title={ "Message" } initialOpen={ true }>
                             <PanelRow>
-                                <div dangerouslySetInnerHTML={{__html: this.state.message}}></div>
+                                <div dangerouslySetInnerHTML={ { __html: this.state.message } }></div>
                             </PanelRow>
                         </PanelBody>
                     </Panel>
@@ -162,8 +163,8 @@ class EmailModalView extends Component {
 
         return (
             <Fragment>
-                
-                { this.state.isOpen && 
+
+                { this.state.isOpen &&
                 <Modal { ...modalProps } style={{ minWidth: '75%' }} onRequestClose={ this.closeModal }>
                     { modalBody }
                 </Modal>
@@ -181,10 +182,12 @@ window.EMTRLoadView = function EMTRLoadView( id, subject = '' , to = '' ) {
         to,
     };
 
-    const root = document.getElementById( 'emtr-email-view-modal-container' );
+    const container = document.getElementById( 'emtr-email-view-modal-container' );
+    const root = createRoot( container );
 
-    unmountComponentAtNode( root );
-    render( <EmailModalView {...passProps} />, root );
+    // root.unmount(); // Unmount the component from the root
+
+    root.render( <EmailModalView {...passProps} /> );
 
     return false;
 }
